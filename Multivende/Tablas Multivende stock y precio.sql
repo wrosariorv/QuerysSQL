@@ -1,0 +1,140 @@
+use Multivende
+
+
+CREATE TABLE [dbo].[RVF_TBL_API_LOG](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[Status] [nvarchar](50) NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+	[Proceso] [nvarchar](100) NOT NULL,
+	[JsonRequest] [nvarchar](max) NULL,
+	[JsonResponse] [nvarchar](max) NULL,
+ CONSTRAINT [PK_RVF_TBL_API_LOG] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+-----------------------------------------------------
+
+CREATE TABLE [dbo].[RVF_TBL_API_STOCK_HEADER](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[WarehouseID] [nvarchar](250) NOT NULL,
+	[InformadoMV] [datetime] NULL,
+	[InformadoEpicor] [datetime] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_STOCK_HEADER] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC,
+	[WarehouseID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+CREATE TABLE [dbo].[RVF_TBL_API_STOCK_DETAIL](
+	[ID] [int]  NOT NULL,
+	[WarehouseID] [nvarchar](250) NOT NULL,
+	[PartNum] [nvarchar](50) NOT NULL,
+	[QTY] [int] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_STOCK_DETAIL] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC,
+	[WarehouseID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+ALTER TABLE [dbo].[RVF_TBL_API_STOCK_DETAIL]  WITH CHECK ADD  CONSTRAINT [FK_RVF_TBL_API_STOCK_DETAIL_STOCK_HEADER] FOREIGN KEY([ID], [WarehouseID])
+REFERENCES [dbo].[RVF_TBL_API_STOCK_HEADER] ([ID], [WarehouseID])
+GO
+
+ALTER TABLE [dbo].[RVF_TBL_API_STOCK_DETAIL] CHECK CONSTRAINT [FK_RVF_TBL_API_STOCK_DETAIL_STOCK_HEADER]
+
+
+---------------------------------------------------
+
+CREATE TABLE [dbo].[RVF_TBL_API_PRICE_HEADER](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ProductPriceListID] [nvarchar](250) NOT NULL,
+	[InformadoMV] [datetime] NULL,
+	[InformadoEpicor] [datetime] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_PRICE_HEADER] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC,
+	[ProductPriceListID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+CREATE TABLE [dbo].[RVF_TBL_API_PRICE_DETAIL](
+	[ID] [int]  NOT NULL,
+	[ProductPriceListID] [nvarchar](250) NOT NULL,
+	[ProductVersionId] [nvarchar](250) NOT NULL,
+	[Neto] [decimal](17,5) NOT NULL,
+	[Tax] [decimal](17,5) NOT NULL,
+	[Gross] [decimal](17,5) NOT NULL,
+	[PriceWithDiscount] [decimal](17,5) NOT NULL,
+	[UpdateAt] [datetime] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_PRICE_DETAIL] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC,
+	[ProductPriceListID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+ALTER TABLE [dbo].[RVF_TBL_API_PRICE_DETAIL]  WITH CHECK ADD  CONSTRAINT [FK_RVF_TBL_API_PRICE_DETAIL_PRICE_HEADER] FOREIGN KEY([ID], [ProductPriceListID])
+REFERENCES [dbo].[RVF_TBL_API_PRICE_HEADER] ([ID], [ProductPriceListID])
+GO
+
+ALTER TABLE [dbo].[RVF_TBL_API_PRICE_DETAIL] CHECK CONSTRAINT [FK_RVF_TBL_API_PRICE_DETAIL_PRICE_HEADER]
+
+/***********************************
+Productos relacion Multivende Epicor
+*************************************/
+
+CREATE TABLE [dbo].[RVF_TBL_API_PODUCTOS](
+	[ProductVersionId] [nvarchar](250) NOT NULL,
+	[PartNum] [nvarchar](50) NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_PODUCTOS] PRIMARY KEY CLUSTERED 
+(
+	[ProductVersionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+
+/***********************************
+Lista de Precios Multivende
+*************************************/
+
+CREATE TABLE [dbo].[RVF_TBL_API_LISTAS_PRECIOS](
+	[ProductPriceListID] [nvarchar](250) NOT NULL,
+	[Descripcion] [nvarchar](200) NOT NULL,
+	[ListaPrecioEpicor] [nvarchar](100) NULL,
+	[Fecha] [datetime] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_LISTAS_PRECIOS] PRIMARY KEY CLUSTERED 
+(
+	[ProductPriceListID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+
+
+/***********************************
+Precios actuales Multivende 
+*************************************/
+CREATE TABLE [dbo].[RVF_TBL_API_PRECIOS_ACTUALES](
+	[ProductPriceListID] [nvarchar](250) NOT NULL,
+	[PartNum] [nvarchar](50) NOT NULL,
+	[Neto] [decimal](17,5) NOT NULL,
+	[Tax] [decimal](17,5) NOT NULL,
+	[Gross] [decimal](17,5) NOT NULL,
+	[PriceWithDiscount] [decimal](17,5) NOT NULL,
+	[UpdateAt] [datetime] NOT NULL,
+ CONSTRAINT [PK_RVF_TBL_API_PRECIOS_ACTUALES] PRIMARY KEY CLUSTERED 
+(
+	[ProductPriceListID] ASC,
+	[PartNum] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] 
+GO

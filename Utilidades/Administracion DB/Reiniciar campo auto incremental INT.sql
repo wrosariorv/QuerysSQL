@@ -1,0 +1,1 @@
+DBCC CHECKIDENT ('tu_tabla', RESEED, 1);

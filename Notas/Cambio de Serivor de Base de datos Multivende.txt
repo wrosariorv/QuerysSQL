@@ -1,0 +1,65 @@
+Cobranzas:
+1) "ReicbosCajas_CAplicaccion"
+	vista: RVF_VW_IMP_RECIBO_HEADER							---->RVF_VW_IMP_RECIBO_HEADER_2019
+
+2)"ARReceipr"
+	Tabla: 
+	Select Count(*) as Registros From RVF_TBL_IMP_RECIBO_LOG
+	where Company = Company And Recibo = Recibo
+	
+	Vista: 
+	SELECT * FROM RVF_VW_IMP_RECIBO_MEDIOS_COBRO 			---->RVF_VW_IMP_RECIBO_MEDIOS_COBRO_2019
+	where Recibo = Recibo
+	
+	Vista: Extraer facuras aplicar
+	SELECT * FROM RVF_VW_IMP_RECIBO_FC_APPLIED 				----->RVF_VW_IMP_RECIBO_FC_APPLIED_2019
+	where Recibo = Recibo order by AppliedAmt	
+	
+
+[CORPSQLMULT2019].[moviventas_test].[dbo].
+moviventas_test
+
+
+Cotizaciones:
+
+1)LeeCotizacionesPendientes:
+	Vista
+	Select * from RVF_VW_IMP_QUOTE_HEADER					------>RVF_VW_IMP_QUOTE_HEADER_2019
+	
+2)ProcesaEncabezadoCotizacion:
+	Tabla
+	Select Count(*) Registros from RVF_TBL_IMP_QUOTE_LOG
+	where Company = Company And Cotizacion = Cotizacion
+	
+	Vista
+	select * from RVF_VW_IMP_QUOTE_DETAIL					------>RVF_VW_IMP_QUOTE_DETAIL_2019
+	where Company = Company and QuoteNum = Cotizacion
+	order by Company, QuoteNum , QuoteLine
+	
+	
+Instalar en el servidor de integraciones de Prueba prueba CORPL11-EPIECO1:
+-Serviceconnect
+-Epicor Test
+
+Integracion Cotizacion Moviventas
+Es multi company, es necesiario crear el usuario Usr_CDEE para la planta correspondiente en la nueva company
+
+Integracion de despacho 
+Esta integracion no soporta Multi company, se debe tener:
+-Se debe duplicar los circuito actuales para la nueva company y usar el usuairo de epicor con permisos a la nueva company("Este proceso actualmente se ase asi para integrar los depachos de Mplace")
+-Los archivos generados por el SIG debe venir la infromacion del la company y planta correspondiente a la nueva company.
+-Se debe crear el usuario correspondiente a los permiso de epicor para la nueva empresa igual al usuario "Usr_CDEE"
+
+Integracion de Cobranzas
+Esta integracion no soporta Multi company, se debe tener:
+-Se debe duplicar los circuito actuales para la nueva company y usar el usuairo de epicor con permisos a la nueva company.
+-La vista de Movienta: [CORPSQLMULT2019].Moviventas.dbo.vw_cobranzas no trae el dato de Company actuamente es un dato fijo de la vista de Epicor [dbo].[RVF_VW_IMP_RECIBO_HEADER]
+-La vista de Epicor destinada a la informacion de medio de cobro [dbo].[RVF_VW_IMP_RECIBO_MEDIOS_COBRO] tiene el dato de company fijado
+	Las vistas de moviventas no trae informacion de company:
+	[CORPSQLMULT2019].Moviventas.dbo.vw_transferencias_cobranza
+	[CORPSQLMULT2019].Moviventas.dbo.vw_retenciones_cobranza
+	[CORPSQLMULT2019].Moviventas.dbo.vw_cheques_cobranza
+-La vista de Epicor destinada a extraer facuras para aplicar [dbo].[RVF_VW_IMP_RECIBO_MEDIOS_COBRO] tiene el dato de company fijado
+	Las vistas de moviventas no trae informacion de company:
+		[CORPSQLMULT2019].Moviventas.dbo.vw_documentos_cobranza
+

@@ -1,0 +1,22 @@
+
+begin tran
+
+delete RV_TBL_SIP_ITEM_TP
+where TranNum>2
+
+delete RV_TBL_SIP_ENCABEZADO_TRANSFERENCIA_P
+where TranNum>2
+
+delete RV_TBL_SIP_LOG_TP
+
+DBCC CHECKIDENT ('RV_TBL_SIP_ENCABEZADO_TRANSFERENCIA_P', RESEED, 2);
+
+DBCC CHECKIDENT ('RV_TBL_SIP_LOG_TP', RESEED, 0);
+
+--commit tran
+
+
+select * from RV_TBL_SIP_ITEM_TP
+
+select * from RV_TBL_SIP_ENCABEZADO_TRANSFERENCIA_P
+

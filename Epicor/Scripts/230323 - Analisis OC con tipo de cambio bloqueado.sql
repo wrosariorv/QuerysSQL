@@ -1,0 +1,74 @@
+
+SET DATEFORMAT DMY
+
+/*
+
+SELECT				*
+FROM				CORPEPIDB.EpicorErp.Erp.ContainerHeader
+WHERE				ContainerID				IN				(6771, 6821, 6823, 6825, 6831, 6837, 6839)
+ORDER BY			ContainerID
+
+SELECT				*
+FROM				CORPEPIDB.EpicorErp.Erp.ContainerDetail
+WHERE				ContainerID				IN				(6771, 6821, 6823, 6825, 6831, 6837, 6839)
+ORDER BY			ContainerID, PONum, POLine 
+
+SELECT				POH.Company, POH.PONum, POH.EntryPerson, POH.OrderDate, POH.CurrencyCode, POH.ExchangeRate, POH.LockRate 
+FROM				CORPEPIDB.EpicorErp.Erp.POHeader						POH
+INNER JOIN			(
+					SELECT				DISTINCT Company, PONum
+					FROM				CORPEPIDB.EpicorErp.Erp.ContainerDetail
+					WHERE				ContainerID				IN				(6771, 6821, 6823, 6825, 6831, 6837, 6839)
+					)														CD
+	ON				POH.Company				=			CD.Company
+	AND				POH.PONum				=			CD.PONum
+ORDER BY			PONum
+
+*/
+
+SELECT				POH.Company, POH.PONum, POH.EntryPerson, POH.OrderDate, POH.CurrencyCode, POH.ExchangeRate, POH.LockRate, 
+					CD.ContainerID, 
+					PackSlip 
+FROM				CORPEPIDB.EpicorErp.Erp.POHeader						POH				WITH (NoLock)
+LEFT OUTER JOIN		(
+					SELECT				Company, PONum, ContainerID
+					FROM				CORPEPIDB.EpicorErp.Erp.ContainerDetail									WITH (NoLock)
+					GROUP BY			Company, PONum, ContainerID
+					)														CD
+	ON				POH.Company				=			CD.Company
+	AND				POH.PONum				=			CD.PONum
+LEFT OUTER JOIN		(
+					SELECT				Company, PONum, PackSlip
+					FROM				CORPEPIDB.EpicorErp.Erp.RcvDtl									WITH (NoLock)
+					GROUP BY			Company, PONum, PackSlip
+					)														R
+	ON				POH.Company				=			R.Company
+	AND				POH.PONum				=			R.PONum
+WHERE				POH.CurrencyCode			=			'RMB'
+	AND				POH.LockRate				=			1
+	OR				(
+					POH.CurrencyCode			=			'RMB'
+					AND 
+					POH.ExchangeRate			<			10
+					AND
+					POH.OrderDate				>=			'01/01/2022'
+					)
+	OR				(
+					POH.OrderDate				>=			'01/01/2022'
+					AND
+					POH.PONum					IN
+					(
+					1018505, 1018723, 1018724, 1018725, 1018726, 1018727, 1018728, 1018731, 1018733, 1018734, 1018739, 1018741, 1018949, 1018951, 1018953, 1018964, 
+					1018966, 1019002, 1019007, 1019015, 1019019, 1019025, 1019026, 1019226, 1019391, 1019392, 1019398, 1019403, 1019417, 1019762, 1019763, 1019765, 
+					1019766, 1019767, 1019768, 1019769, 1019770, 1019771, 1019772, 1019773, 1019774, 1019775, 1019776, 1019777, 1019778, 1019779, 1019780, 1019781, 
+					1019782, 1019783, 1019784, 1019785, 1019786, 1019787, 1019788, 1019789, 1019831, 1019833, 1019835, 1019836, 1019837, 1019838, 1019839, 1019840, 
+					1019841, 1019842, 1019843, 1019844, 1019845, 1019846, 1019847, 1019848, 1019849, 1019850, 1019851, 1019852, 1019853, 1019854, 1019855, 1019856, 
+					1019857, 1019858, 1019859, 1019860, 1019861, 1019862, 1019863, 1019864, 1019865, 1001684, 1001685, 1001686, 1001687, 1001688, 1001689, 1001690, 
+					1001691, 1001692, 1001693, 1001694, 1001695, 1001697, 1001698, 1001699, 1001700, 1001701, 1001702, 1001703, 1001704, 1001705, 1001706, 1001707, 
+					1001708, 1001709, 1001710, 1001711, 1001712, 1001713, 1001714, 1001715, 1001716, 1001717, 1001718, 1001719, 1001720, 1001721, 1001722, 1001723
+					)
+					)
+
+ORDER BY			POH.Company, POH.PONum
+
+
