@@ -16,6 +16,8 @@ ORder by QuoteNum
 select top 1* from RVF_TBL_IMP_QUOTE_LOG
 where Cotizacion='49877'
 
+
+
 begin tran
 Select *
 --delete 
@@ -66,7 +68,23 @@ where nroCotizacion in (20146,20147)
 
 --delete RVF_TBL_IMP_QUOTE_LOG_TEST where Cotizacion ='26067'
 
+---------------------------------------
+--busco detalle de cotizacion con cantidad en cero
+---------------------------------------
+Select Company, 
+		--QuoteNum as QuoteNum1,
+		CASE
+				WHEN QuoteNum='55643'
+				THEN '209739'
+				WHEN QuoteNum='55644'
+				THEN '209738'
+				
 
+		END AS QuoteNum, 
+		QuoteLine, PartNum, SellingExpectedQty
+from RVF_VW_IMP_QUOTE_DETAIL
+where QuoteNum in ('55644','55643')
+ORder by QuoteNum, QuoteLine
 
 ---------------------------------------
 --Analisis
