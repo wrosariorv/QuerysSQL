@@ -1,0 +1,114 @@
+/*
+CREATE PROCEDURE ActualizarImeiEnSerialNo_UD
+AS
+*/
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @Pendientes TABLE (
+        ForeignSysRowID UNIQUEIDENTIFIER PRIMARY KEY,
+        NuevoImei NVARCHAR(50)
+    );
+
+    -- 1. Cargar primero solo los Labels recientes
+    DECLARE @Labels TABLE (
+        ModeloRV NVARCHAR(50),
+        SerialRV NVARCHAR(50),
+        ImeI_1 NVARCHAR(50)
+    );
+
+    INSERT INTO @Labels (ModeloRV, SerialRV, ImeI_1)
+    SELECT 
+				L.ModeloRV,
+				L.SerialRV,
+				H.ImeI_1
+    FROM		[PLANSQLMULT2019].SIP.dbo.Labels L
+    INNER JOIN	[PLANSQLMULT2019].SIP.dbo.HDT H
+        ON		L.MSN		 =		H.Msn
+    WHERE		CAST(L.TimeMaster AS date) > '2024-12-09'
+
+AND SerialRV in (
+
+'RF1410975539945',
+'RF1410975539946',
+'RF1410975539947',
+'RF1410975539948',
+'RF1410975539949',
+'RF1410975539950',
+'RF1410975539951',
+'RF1410975539952',
+'RF1410975539953',
+'RF1410975539954',
+'RF1410975539955',
+'RF1410975539956',
+'RF1410975539957',
+'RF1410975539958',
+'RF1410975539959',
+'RF1410975539960',
+'RF1410975539961',
+'RF1410975539962',
+'RF1410975539963',
+'RF1410975539964',
+'RF1410975539965',
+'RF1410975539966',
+'RF1410975539967',
+'RF1410975539968',
+'RF1410975539969',
+'RF1410975539970',
+'RF1410975539971',
+'RF1410975539972',
+'RF1410975539973',
+'RF1410975539974',
+'RF1410975539975',
+'RF1410975539976',
+'RF1410975539977',
+'RF1410975539978',
+'RF1410975539979',
+'RF1410975539980',
+'RF1410975539981',
+'RF1410975539982',
+'RF1410975539983',
+'RF1410975539984',
+'RF1410975539985',
+'RF1410975539986',
+'RF1410975539987',
+'RF1410975539988',
+'RF1410975539989',
+'RF1410975539990',
+'RF1410975539991',
+'RF1410975539992',
+'RF1410975539993',
+'RF1410975539994'
+);
+
+    -- 2. Insertar los pendientes aplicando filtros desde el principio
+    --INSERT INTO @Pendientes (ForeignSysRowID, NuevoImei)
+    SELECT 
+					UD.ForeignSysRowID,
+					LBL.ImeI_1
+    FROM			/*[WS].DBO.RV_TBL_SIP_ITEM_TP I
+    INNER JOIN		*/[CORPE11-EPIDB].EpicorERP.ERP.SerialNo SN
+        /*ON			I.Company		=			SN.Company
+        AND			I.PartNum		=			SN.PartNum
+        AND			I.Serie			=			SN.SerialNumber*/
+    INNER JOIN		[CORPE11-EPIDB].[EpicorERP].ERP.SerialNo_UD UD WITH (NOLOCK)
+        ON			SN.SysRowID		=			 UD.ForeignSysRowID
+    INNER JOIN		@Labels LBL
+        ON			LBL.ModeloRV	=			SN.PartNum
+        AND			LBL.SerialRV	=			SN.SerialNumber
+    WHERE 
+					/*CAST(I.HoraFabricacion AS DATE) > '2024-12-09'
+        AND			I.Estado						= 'Integrado'
+        AND			*/UD.imei_c						= '';
+
+     --3. Actualizar
+    --UPDATE UD
+    --SET imei_c = P.NuevoImei
+    --FROM [CORPE11-EPIDB].[EpicorERP].ERP.SerialNo_UD UD
+    --INNER JOIN @Pendientes P
+    --    ON UD.ForeignSysRowID = P.ForeignSysRowID;
+
+
+
+END
+GO

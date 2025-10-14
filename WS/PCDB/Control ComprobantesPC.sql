@@ -1,29 +1,61 @@
+select * from RV.RV_TBL_SIP_LOG_PC
+order by Fecha desc
 
 select * from RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
 where
-		TranNum in (683)
+TranNum=3335
+
+--Update RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
+--set Estado='ErrorLinea'
+--where
+--TranNum=3335
+--Estado='Pendiente'
+TranNum>3323
+
+select LEN(Comentario) AS CanitdadComentario,* from RV.RV_TBL_SIP_DETALLE_COMPROBANTE
+where
+TranNum>3323
+
+select * from RV.RV_TBL_SIP_TAXES
+where
+TranNum>3323
+		TranNum in (3305,
+3306,
+3307,
+3308,
+3309)
 order by TranNum
 
 select * from RV.RV_TBL_SIP_DETALLE_COMPROBANTE
 where
-		TranNum in (683)
+		TranNum in (3305,
+3306,
+3307,
+3308,
+3309)
 order by TranNum
 
 
 
 select * from RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
 where
-		Estado<>'Integrado'
-		and TranNum>1701
+		/*Estado<>'Integrado'
+		and*/ TranNum=3335
 order by TranNum
 
 select * from RV.RV_TBL_SIP_DETALLE_COMPROBANTE
 where
 		
-		Estado<>'Integrado'
-		and TranNum>1701
+		/*Estado<>'Integrado'
+		and*/ TranNum=3335
 order by TranNum
 
+SELECT				'SO' AS Tabla, ID AS id_caso, id_estado , nota_credito_debito, NC_INTERNO
+FROM				[dbo].[casos]
+WHERE				ID		in		(23173)
+
+select * from [RV].[RV_TBL_SIP_JOB_ACTUALIZA_ESTADO_PC]
+where TranNum=3335
 
 update RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
 set 
@@ -80,9 +112,9 @@ Estado='Pendiente',
 InvoiceNum = null,
 GroupoAsignado = null,
 Eliminado = null
-where FechaModificacion is not null
+where /*FechaModificacion is not null
 and  Estado <> 'Pendiente'
---and TranNum in (4,15)
+and */TranNum in (3335)
 
 update RV.RV_TBL_SIP_DETALLE_COMPROBANTE
 set FechaModificacion = null,
