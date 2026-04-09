@@ -25,7 +25,8 @@ BEGIN
     FROM		[PLANSQLMULT2019].SIP.dbo.Labels L
     INNER JOIN	[PLANSQLMULT2019].SIP.dbo.HDT H
         ON		L.MSN		 =		H.Msn
-    WHERE		CAST(L.TimeMaster AS date) > '2024-12-09';
+    WHERE		 CAST(L.TimeMaster AS date) >= DATEADD(MONTH, -1, GETDATE())
+                --CAST(L.TimeMaster AS date) > '2024-12-09';
 
     -- 2. Insertar los pendientes aplicando filtros desde el principio
     --INSERT INTO @Pendientes (ForeignSysRowID, NuevoImei)
@@ -43,7 +44,8 @@ BEGIN
         ON			LBL.ModeloRV	=			I.PartNum
         AND			LBL.SerialRV	=			I.Serie
     WHERE 
-					CAST(I.HoraFabricacion AS DATE) > '2024-12-09'
+                    CAST(I.HoraFabricacion AS DATE) >= DATEADD(MONTH, -1, GETDATE())
+					--CAST(I.HoraFabricacion AS DATE) > '2024-12-09'
         AND			I.Estado						= 'Integrado'
         AND			UD.imei_c						= '';
 

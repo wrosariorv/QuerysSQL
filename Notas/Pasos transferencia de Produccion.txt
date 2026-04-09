@@ -1,0 +1,48 @@
+0)	objeto: ReceiptsFromMfgSvc
+	Metodo: GetNewReceiptsFromMfg
+
+	Este método crea una nueva entrada de fila ttPartTran.
+	
+1)	objeto: ReceiptsFromMfgSvc
+	Metodo: GetNewReceiptsFromMfgJobAsm
+
+	Este método crea una nueva entrada de fila ttSelectedJobAsmbl y regresa toda la info de la propiedad PartTran
+
+2)	objeto: ReceiptsFromMfgSvc
+	Metodo: OnChangeActTranQty
+	
+	Obtiene los parámetros necesarios para iniciar Seleccionar números de serie (whereClause necesario para el paso 5)
+	
+3) objeto: SelectedSerialNumbersSvc
+	Metodo: GetSerialNumFormat
+	
+	En este paso se pasa el numero de pieza para obeterer el siguiente formato de número de serie en función codigo de parte.
+	devuelve el la propiedad (SNFormat)
+	
+4)	objeto: SelectedSerialNumbersSvc
+	Metodo: GetNextSN
+	
+	En este metodo obtienes el siguiente número de serie según el formato del número de pieza pasado
+	
+5)	objeto: SerialNoSvc
+	Metodo: GetList
+	
+	Devuelve una lista de series con su informacion que cumplen la cláusula where
+	
+6)	objeto: ReceiptsFromMfgSvc
+	Metodo: PreUpdate
+	
+	Este método devolverá un registro en la tabla de datos LegalNumberGenerate si se requiere un número legal para esta transacción. 
+	El indicador RequiresUserInput indicará si este número legal requiere una entrada del usuario. Si es así, es necesario llamar a los objetos 
+	comerciales LegalNumberPrompt para recopilar esa información. Este método debe llamarse cuando el usuario guarda el registro, pero antes de llamar al método Actualizar
+	
+7)	objeto: ReceiptsFromMfgSvc
+	Metodo: VerifySerialMatchAndPlanContract	
+	
+	Verifica si el usuario debe ingresar números de serie secundarios para los números de serie que se reciben según la configuración de la coincidencia de números de serie antes de guardar.
+	se obtiene las propiedades (PkgControlItem y PkgControlHeader)
+	
+8)	objeto: ReceiptsFromMfgSvc
+	Metodo: ReceiveMfgPartToInventory	
+	
+	Actualice las series a Inventary.

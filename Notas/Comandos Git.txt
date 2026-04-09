@@ -1,0 +1,446 @@
+*****************************
+**1)Comandos basicos de git**
+*****************************
+1.1) 	git --version
+Comando para saber la verison de git instaladas el "--" indica que va una plabar completa como paramentrp
+
+1.2) 	git -v
+Comando para saber la verison de git instaladas el "-" indica que va una abreviatura como paramentrp
+
+1.3) 	git help
+Comando para obtener la ayuda de git
+
+1.4) 	git help commit
+Se obtiene la ayuda de git pero directamente desde la pagina web en la consola en este caso estamos consultando
+la info de "commit" 
+
+1.5)	git config --global user.name "Wilfredo Rosario"
+Se define confirguracion global, en este caso Nombre del desarrollador
+
+		git config --global user.email "wjroasrio2@gmail.com"
+Se define confirguracion global, en este caso correo del desarrollador no registrado en GIT
+
+		git config --global -e
+Este comando se usa para verificar las configuraciones ya establecidas
+
+
+1.6)	"parado en un directorio en particular" git init
+Comando usando para inisializar el repositorio
+ejemplo:
+F:\BranchWR\APIs\Licencias\LicenciasRG>git init
+
+		git config --global	init.defaultBranch main
+		
+Comando usando para establecer el nuesta raiz del nuestro branch
+ejemplo:
+git config --global init.defaultBranch main
+
+1.7)	git status
+Comando que indica 	informaion de los commit y ramas
+
+Nota:
+		git config core.autocrlf true
+comando para evitar este error CRLF:
+ejemplo:
+warning: in the working copy of 'WSLicencias/Properties/PublishProfiles/FolderProfile.pubxml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'WSLicencias/Properties/PublishProfiles/FolderProfile.pubxml.user', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'WSLicencias/Repository/Licencias.cs', LF will be replaced by CRLF the next time Git touches it
+
+
+**********************************
+**2)Comandos modificacion de git**
+**********************************
+
+2.1)	git add "Nombre del archivo" ejemplo: git add index.html
+Se agregaga un archivo en particuar en el stage
+
+2.2)	git add .
+Se agregaga todo los archivos en el stage
+
+2.3)	git reset "file name" ejemplo: git reset index.html
+Remover un archivo del stage
+otra forma: git rm --cached "file name"
+2.4)	git commit -m "Primer commit"
+Se toma la fotogracia se debe indicar un nombre que indique la modificacion realizada
+
+2.5)	git checkout -- .
+comando usando para reconstruir el proyecto a como estaba en el ultimo commit
+
+OjO: cuando te aprezca en un IDE un diretorio con una letra "u" significa que el directorio no est agregado al stage
+u -> Untrack
+
+2.6)	git branch
+es un comando que dice en que rama o branch estamos trabajando es similar a l "git status" pero el este ultimo da mas infromacion.
+
+una branch es un universo donde esta aislada del directorio principal pero que sigue estando dentro del proyecto. No es acaonsejable hacer muchas modificaciones sobre la branch raiz o "master"
+
+
+2.7)	git branch -m master main
+renombrar la branch raiz.
+OjO: esta modificacion no impata de manera globar es decier en la config la raiz se sigue llamando master
+-m ---> Modify
+
+2.8)	git config --global init.defaultBranch Main
+renombrar la branch raiz de manera global todo los usuario podran ver el branch 
+
+2.9) 	git branch Nombre de la Rama
+Comando usado para crear una rama nueva pero si moverte a esa rama
+
+************************************
+**3)Construccion de add y commits **
+************************************
+3.1)	git commit -am "Readme actualizado"
+
+Este comando permite committear una modificaicon de un archivo siempre y cuando el archivo este ya agregado al branch, es decir, di tiene Untrack no lo agregara
+
+
+3.2) 	git log
+Se visualiza informacion de los logs del repositorio.
+
+informaicon:
+-Hash: indicador unico de un commit
+-HEAD apuntado a
+-autor
+-fecha
+-Informacion del log.
+
+
+3.3)	git add *.html
+agregar todos los archivo en el proecto que tiene extensions html
+
+3.4)	git add Modeles/*.cs
+agregar todos los archivo en el proyecto que tiene extensions .cs de un directorio en particular
+
+3.5)	git add uploads/.gitkeep
+agregar el archivo .gitkeep en el proyecto, de un directorio en particular para este tipo de archivo no se puede usar /*.gitkeep porque el archivo no tiene nombre.
+
+3.6)	git add Models/
+agregar todo los directorio, sub directorios y archivos que se encuentran en la carpeta Models de la raiz.
+
+3.7)	git status --short
+Permite hacer un git status para observar los commit y ramas pero con menos informacion
+
+3.8)	git log --oneline
+permite hacer un git log pero con informacion reducida en una sola linea.
+
+
+**********************************
+**4)Construccion de coman alias **
+**********************************
+
+4.1)	git config --global alias.s "status --short" (git config --global alias.[alias] "[comando a reducir]")
+Comando para crear un alias para realizar un comando "status --short"
+
+una vez realizado el alias si, podras ejecutar "git s" y se ejcutara el 
+
+Los alias 	creados son establecidos de manera global, lo que significa que cualquiera lo puede usar y se puede usar en los distintos branch
+
+4.2)	git config --global alias.l "log --online --decorate --all -graph" (git config --global alias.[alias] "[comando a reducir]")
+comando para mostrar los log reducido en una sola linea
+
+4.3) git config --global alias.lg "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+comando para mostrar los log reducido en una sola linea con decoradores
+
+4.3)	git config --global -e
+comando para modificar un alias
+
+
+**********************************
+**5)Fundamentos de GIT avanzado **
+**********************************
+
+5.1)	git diff
+Sirver para diferenciar un archivo tenga diferenciar, el archivo deber esta con la M de Modify.
+
+5.2)	git diff --staged
+Compara los campios de una archivo con M de Modify contra el Staged
+
+5.3)	git commit --amend -m "Intalaciones actualizada"
+comando par modificar el mensaje del commit, solo para el ultimo commit realizado
+
+5.4)	git reset --soft HEAD^(opcional 2,3,4,etc)
+Comando para modificar un commit anterior, en caso de quere 2 commit anterior al ultimo se debe agrear el numero.
+basicamente lo que pasa es que se saca del stage todos los comit hasta el punto que indiquemos permitiendo hacer un comiit nuevo con modificacion que deseemos
+el parametro soft lo que indica es que no se haran modificaciones destructivas.
+otra forma de hacerlo con el hash largo o corto es:
+		git reset --soft 13248c3
+
+OjO: si alata un warnin indicando: LF will be replace by CRLF in historia/batman.historia.md. the file will have its original line endings in your working directory.
+se soluciona corriendo el comando: git config core.autocrlf true
+
+
+******************************************
+**6)Viajes en el tiempo resets y reflog **
+******************************************
+
+6.1)	git reset --mixed db37df0
+comando usado para volver en el tiempo a un punto deseado sim que saque las modificaciones realizadas en el codigo.
+el paramentro mixed no es destructivo pero saca todo del stage para que se puedo volver a commitear.
+por defecto el git reset db37df0 viene con el parametro"--mixed"
+
+6.2)	git reset --hard 	db37df0
+comando usado para volver en el tiempo a un punto deseado pero haciendo las modificaciones necesarias para que el codigo quede tal cual al punto del tiempo deseado.
+el paramentro hard es destructivo va a dejar el repositorio talcual al punto del tiempo deseado.
+
+6.3)	git reflog
+Comando usando para ver en orden cronologico todos los comando realizados.
+
+teniendo el hash largo o corto puede hacer un git reset --hard 	1ee019b para moverte hasta el punto deseado
+
+6.4)	git mv destruir-mundo.md salvar-mundo.md
+comando para mover un archivo en este caso al mismo directorio y renombrando el archivo esto agregar una R de renamed
+
+6.5)	.gitignore
+Este archivos se cresa usualmente en el directorio raiz y se usa para idicar a que directorios o archivos no debe dar seguimiento
+dentro del archivo .gitignore para ignorar un directorio se esccribe: 
+directorio--->	"dist/"
+directorio--->	"node_modules/"
+archivo------>	"server.log"
+archivos----->	"*.log"
+
+OjO: el archivo .gitignore se debe agregar al stage y commitear para llevar seguimiento
+
+
+****************************************
+**7)Ramas, uniones, conflictos y tags **
+****************************************	
+Las ramas son otra linea en el tiempo que tiene otra serie de commit que puede que se una a la rama pricipal o no.
+
+7.1)	git branch rama-villanos	
+comando usado para crear una rama.
+
+7.2)	git branch
+Lista la rama existentes
+
+7.3)	git checkout rama-villanos
+comando usado para moverse a una rama en particular.
+
+7.4)	git checkout master
+		git merge rama-villanos
+Para unir un branch con la rama master debes pararte en la rama que va a recibir en este caso la rama master.
+OjO: Si todo sale bien tentrias una respuesta de tipo Fast-forward que significa que git logro identificar cada uno de los cambio y no hubo nigun conflicto
+
+*****para que se grafique correctamente usar: git merge --no-ff [Nombre de la Rama]******
+
+
+7.4.1)	git checkout <hash>
+Comando usado para moverse a un punto en el tiempo en particuar o "commit" en especicico
+
+
+7.5)	git branch -d rama-villanos -f
+comando usado para eliminar una rama, esto se suele hacer una vez se ha unido una rama con la rama raiz.
+el paramentro -f indica que haga la accion de manera forzada.
+
+7.6)	git checkout -b rama-villanos
+comando usado para crear una rama y moverse directamente a esta rama recien creada.
+
+7.7)	 git tag super-release
+comando usasdo para agrear una etiqueta para identificar un comentiario de que estado se encontraba el codigo en ese momento
+
+7.8)	 git tag
+comando lista los tags existentes
+
+7.9)	 git tag -d super-release
+Se elimina un tag en especifico
+
+7.10)	 git tag -a v1.0.0 -m "Version 1.0.0"
+la bandera -a es por annoteded y -m message
+
+Nota de la nomesclatura: V: version, 1:Cambio mayores o Breacking Changes,0:Agregado de funcionalidad que no rompe el codigo anterior, 0:Bug fix, algo resuelto
+
+7.11)	 git tag -a v0.1.0 701c885 -m "Version Alpha de nuestro codigo"
+comando usado para colocar un tag a un commis especifico.
+
+7.12)	 git show v0.1.0
+Muesta mas informacion de un tag en particuar
+
+Extra:
+
+7.13)	git branch -r
+	Lista las ramas remotas en github
+	
+7.14)	git checkout -b fix-desde-tag super-release
+		Comanod usado para crear una rama en el punto exacto en el que estaba en el TAG "super-release"
+		
+7.13)	git push --tags
+		comando para hacer push de todos los tag de un proyecto
+		o tambien se puede hacer push de tags en especificos con el comando:
+
+		git push origin [etiqueta]
+		git push origin v1.0.0
+
+
+
+****************************************************
+**8)Git Stash y Git Rebase- Cambios de emergencia **
+****************************************************	
+Stash:
+Es un lugar en donde se puede mover todos los cambio incluso cambio de archivos que aun no se le da seguimiento. 
+Este lugar almacenara todos los cambios en el que se estuvo trabajando desde el ultimo commit realizado. al realizar un Stash volvemos al ultimo punto commiteado.
+si se esta trabajando con ramas no es muy obligatorio hacer Stash
+
+Rebase:
+Permite unir commit, separa commit, squatch "chocar dos commit", renombrar los nombre de los commit
+
+8.1)	git stash
+comando para hacer un stash de el directorio tal cual como se encuentrar en ese momento
+WIP: working in progress
+
+8.2)	git stash list
+Se lista todos los stash realizados
+
+8.3)	git stash pop
+Recuperar el ultimo stash y lo elimina
+
+8.4)	git stash clean
+borra todos los stash de manera forzada
+
+8.5)	git stash apply stash@{2}
+recupera el stash numero 2.
+OjO: el ultimo stash realizado siempre sera el 0 y amedida que se vayan creando se van desplzando secuencialmente
+
+8.6)	git stash drop
+Elimina el ultimo stash realizado {0}
+
+8.7)	git stash drop stash@{1}
+Elimana un stash en particular.
+
+8.8)	git stash save "Agrego stash pepito al staged"
+comando usado para guardar un stash al stage e identificar
+
+8.9)	git stash list --stat
+Lista los stash con mas infromacion
+
+8.10)	git rebase master
+
+8.11)	git rebase -i HEAD~4
+
+
+**************************************
+**9)GitHub, Git Remote, Push & Pull **
+**************************************
+recomendable leer:
+¿Qué es Gitosis? --->https://wiki.archlinux.org/title/gitosis#:~:text=Gitosis%20is%20a%20tool%20which,system%20accounts%20on%20the%20server.
+
+Guardar su contraseña de GitHub en la máquina WINDOWS
+
+Guardar usuario y contraseña de GitHub --->https://github.com/res0nat0r/gitosis
+
+
+
+Guardar su usuario y contraseña en la máquina LINUX
+
+Guardar usuario y contraseña de GitHub en la máquina --->https://docs.github.com/es/get-started/getting-started-with-git/caching-your-github-credentials-in-git#platform-linux
+
+
+
+Para usuario de OSx 10.0 o superior, el KeyChain se los maneja automáticamente
+
+
+Instalación y configuración
+
+9.1)	git remote add origin https://githup.com/wjrosario/PROYECTO
+configuracion para hacer agregar un origen remoto, tambien puede ser SSH en vez de HTTP
+
+9.2)	git remote -v
+comando para listar los orignes remoto
+ejmplo:
+origin https://githup.com/wjrosario/PROYECTO (fetch)
+origin https://githup.com/wjrosario/PROYECTO (Push)
+
+fetch: este podriar ser un origen distinto para obtener repositorios distinta a donde vamos hacer push.
+
+9.3)	git push -u origin master
+configuracion incial para indicar que paramentros usar para hacer un push
+origin: nombre del repositorio que nosotros queremos, para subir la informacion
+master: es la rama que nosotros deseamos enviar al repositorio
+-u: nos ayuda a especificar que la proximan vez que queramos hacer push no necesitemos especificar la rama
+
+9.4)	git remote add origin https://githup.com/wjrosario/PROYECTO
+		git branch -M main
+		git push -u origin main
+Comando usados para importar un repositorio local a un repositorio de github		
+
+9.5)	git push --tags
+comando para hacer push de todos los tag de un proyecto
+o tambien se puede hacer push de tags en especificos con el comando:
+
+		git push origin [etiqueta]
+		git push origin v1.0.0
+		
+
+9.6)	git pull
+Comando para traer las modificacion o commit desde github es lo contrario del git push.
+
+9.7)	git pull origin main
+comando par ahacer los pull pero idintificando los origenes y destinos (fetch,push)
+
+9.8)	git remote -v
+comando usaro para observar los pad donde se encuentra el origen de los repositorios (fetch: donde se obtiene la informacion) (push:donde se va a subir la informacion )
+
+9.9)	git config --global pull.ff pull.ff only
+comando usado para configurar de manera global que al ahacer los pull use la estrategia Fast-forward unicamente
+
+9.10)	git clone "URL de repositorio"
+comando usado para clonar repositorio
+
+9.11)	git config pull.rebase true
+comando usado para configurar de manera local que al haber incosistencia entre git local y github, tengamos un archivo modificado en git hub y que localmente. estos se puedan juntar o elegir el que corresponda
+estariamos en medio de un "rebasing"
+
+9.12)	git rebase --continue
+Comando usado para salir de un modo en conflicto, obviamente es necesiaro resolver el conflicto para poder usar este comando
+
+9.13)	git config --global pull.rebase true
+Comando para hacer la configuracion local de al momneto que haya conflictos al hacer un pull vaya por la estrategia o modo rebase
+
+9.14) 	git push origen "Nombre de la Rama"
+Comando usado para subir una rama a github
+
+Inicializacion de un respositorio en GIT y GitHub
+-		git init
+-		git config core.autocrlf true
+-		agregar .gitignore correspondiente
+-		git add .
+-		git commit -am "Primer commit proyecto "
+-		echo .vs/ > .gitignore
+-		echo ComprobantesPC/obj/ >> .gitignore
+-		git remote add origin https://github.com/wrosariorv/ComprobantesPC.git
+-		git push -u origin main
+-
+borra lineae:
+-		(Get-Content .gitignore | Select-Object -Skip 2) | Set-Content .gitignore
+-
+		
+
+**************************************
+**10)GitHub basico **
+**************************************
+
+10.1)	
+
+10.2)	
+
+10.3)	
+
+10.4)	
+
+10.5)	
+
+10.6)	
+
+**************************************
+*************** EXTRAS ***************
+**************************************
+
+git reset --hard origin/Rama-ApiTransferenciasentrePlantaMultiParte
+		Hace que tu rama local coincida exactamente con la versión más reciente de la rama remota, descartando cualquier cambio local en archivos rastreados.
+git clean -fd
+		Elimina archivos y carpetas no rastreados.
+		
+Redirigi .github en ps usar:
+	setx GIT_CONFIG_GLOBAL "\\soluhznfile01\Grupos\Desarrollo\BranchWR\GIT\.gitconfig"
+Luego correr el comando: para autorizsar tu usaurio de github con git:
+	git config --global credential.helper manager
+	
+al hacer un commit y luego push a la rama correspondiente y pedira autorizar contra github

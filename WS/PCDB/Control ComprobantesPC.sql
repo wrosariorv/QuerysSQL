@@ -3,6 +3,7 @@ order by Fecha desc
 
 select * from RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
 where
+        TranNum not in (select TranNum from RV.RV_TBL_SIP_DETALLE_COMPROBANTE)
 TranNum=3335
 
 --Update RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE

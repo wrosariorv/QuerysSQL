@@ -1,0 +1,21 @@
+//Test
+[Environment]::SetEnvironmentVariable("RV_API__ClientId", "RV_Test", "User")
+[Environment]::SetEnvironmentVariable("RV_API__ClientSecret", "Rawayana1245", "User")
+
+
+[Environment]::SetEnvironmentVariable("RV_API__ClientId", "RV_Test", "Machine")
+[Environment]::SetEnvironmentVariable("RV_API__ClientSecret", "Rawayana1245", "Machine")
+
+//Produccion
+[Environment]::SetEnvironmentVariable("RV_API__ClientId", "RV_Services", "User")
+[Environment]::SetEnvironmentVariable("RV_API__ClientSecret", "wqZ5934UyT35", "User")
+
+
+[Environment]::SetEnvironmentVariable("RV_API__ClientId", "RV_Services", "Machine")
+[Environment]::SetEnvironmentVariable("RV_API__ClientSecret", "wqZ5934UyT35", "Machine")
+
+# en la misma consola (solo verá las nuevas si abrís una consola nueva)
+$env:RV_API__ClientId
+$env:RV_API__ClientSecret
+
+

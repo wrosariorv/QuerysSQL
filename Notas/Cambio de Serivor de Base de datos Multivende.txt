@@ -19,6 +19,16 @@ Cobranzas:
 [CORPSQLMULT2019].[moviventas_test].[dbo].
 moviventas_test
 
+New Version:
+1)"ReicbosCajas_CAplicaccion"
+	vista: [dbo].[RVF_VW_IMP_RECIBO_HEADER]
+
+2)"ARReceipr"
+
+	Vista: [dbo].[RVF_VW_IMP_RECIBO_MEDIOS_COBRO]
+	
+	Vista: [dbo].[RVF_VW_IMP_RECIBO_FC_APPLIED]
+
 
 Cotizaciones:
 
@@ -36,6 +46,14 @@ Cotizaciones:
 	where Company = Company and QuoteNum = Cotizacion
 	order by Company, QuoteNum , QuoteLine
 	
+	
+New Version:
+
+1) SP
+
+	[dbo].[RVF_PRC_IMP_QUOTE]
+	
+2) Modificar funcion [dbo].[RVF_FNC_Calcula_NroLinea]
 	
 Instalar en el servidor de integraciones de Prueba prueba CORPL11-EPIECO1:
 -Serviceconnect
