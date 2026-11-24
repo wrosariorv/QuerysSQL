@@ -11,7 +11,7 @@ select
 					UDA.ChildKey5,
 					UDA.CheckBox02															--AS		Conforme
 
-from				[CORPEPIDB].EpicorERP.Ice.UD110A			UDA	WITH (NoLock)
+from				[CORPE11-EPIDB].EpicorERP.Ice.UD110A			UDA	WITH (NoLock)
 
 
 INNER JOIN		
@@ -22,7 +22,7 @@ INNER JOIN
 		CONCAT('R-',SUBSTRING (CAST (SYE.NumeroRemito AS VARCHAR),1,4),'-', SUBSTRING (CAST (SYE.NumeroRemito AS VARCHAR),5,8)
 )		END AS NroRemito,* 
 
-from 				[CORPSQLMULT01].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)) AS A
+from 				[CORPSQLMULT2019].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)) AS A
 
 ON					UDA.ShortChar07 			=			A.NroRemito  COLLATE Modern_Spanish_CI_AS 
 
@@ -41,11 +41,11 @@ WHEN LEN (SYE.NumeroRemito) =15 THEN SYE.NumeroRemito
 ELSE
 CONCAT('R-',SUBSTRING (CAST (SYE.NumeroRemito AS VARCHAR),1,4),'-', SUBSTRING (CAST (SYE.NumeroRemito AS VARCHAR),5,8))  END AS NroRemito,
 * 
-from 			[CORPSQLMULT01].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)
+from 			[CORPSQLMULT2019].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)
 where
 --SYE.FechaDigitalizacion			<>		SYE.FechaActualizacion
 --SYE.FechaConforme is null and
 SYE.DocId=43
 ORDER BY 2 DESC 
 
-Select * from  			[CORPSQLMULT01].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)
+Select * from  			[CORPSQLMULT2019].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)

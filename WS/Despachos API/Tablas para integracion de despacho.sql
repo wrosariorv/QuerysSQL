@@ -1,8 +1,12 @@
 CREATE SCHEMA [DP]
--- Crear tabla de Encabezado
+
+IF OBJECT_ID('[DP].[DespachoDtl]', 'U') IS NOT NULL DROP TABLE [DP].[DespachoDtl];
+IF OBJECT_ID('[DP].[DespachoHdr]', 'U') IS NOT NULL DROP TABLE [DP].[DespachoHdr];
+GO
+
 CREATE TABLE [DP].DespachoHdr (
     Company NVARCHAR(50) NOT NULL,
-    TranNum BIGINT IDENTITY(1,1) NOT NULL,
+    TranNum INT IDENTITY(1,1) NOT NULL,
     Plant NVARCHAR(50) NOT NULL,
     ShipDate DATETIME NOT NULL,    
     OrderNum INT NOT NULL,
@@ -15,29 +19,28 @@ GO
 ALTER TABLE [DP].[DespachoHdr] ADD  DEFAULT (getdate()) FOR [FechaDespacho]
 ALTER TABLE [DP].[DespachoHdr] ADD  DEFAULT ('Pendiente') FOR [Estado]
 
--- Crear tabla de Detalle
-CREATE TABLE DespachoDtl (
-    IdDtl BIGINT IDENTITY(1,1) NOT NULL, -- Llave primaria propia para la fila de detalle
-    TranNum BIGINT NOT NULL,
-    Whse NVARCHAR(50) NULL,
-    BinNum NVARCHAR(50) NULL,
-    PackLine INT NULL,
-    OrderNum INT NULL,
-    OrderLine INT NULL,
-    OrderRelNum INT NULL,
-    DisplayInvQty DECIMAL(18,2) NULL,
-    SerialNo NVARCHAR(MAX) NULL, -- MAX para soportar la cadena larga concatenada con ~
+
+-- 3. Crear tabla de Detalle con Llave Compuesta
+CREATE TABLE [DP].DespachoDtl (
+    TranNum INT NOT NULL,
+    OrderLine INT NOT NULL,
+    OrderRelNum INT NOT NULL,
+    SerialNo NVARCHAR(50) NOT NULL, -- Longitud definida para permitir PK
+    Whse NVARCHAR(50) NOT NULL,
+    BinNum NVARCHAR(50) NOT NULL,
+    DisplayInvQty DECIMAL(18,2) NOT NULL,
     FechaActualizacion DATETIME NULL,
-    Estado NVARCHAR(MAX) NULL,
-    CONSTRAINT PK_DespachoDtl PRIMARY KEY CLUSTERED (IdDtl),
+    Estado NVARCHAR(100) NOT NULL DEFAULT ('Pendiente'),
+
+    -- Llave Primaria Compuesta (Garantiza no duplicidad de Serie por Linea/Rel/Tran)
+    CONSTRAINT PK_DespachoDtl PRIMARY KEY CLUSTERED (TranNum, OrderLine, OrderRelNum, SerialNo),
     
-    -- Foreign Key con borrado en cascada
+    -- Relación con el encabezado y borrado en cascada
     CONSTRAINT FK_DespachoDtl_Hdr FOREIGN KEY (TranNum) 
-        REFERENCES DespachoHdr (TranNum) 
+        REFERENCES [DP].DespachoHdr (TranNum) 
         ON DELETE CASCADE
 );
 GO
-
 -- (Opcional) Crear un índice para mejorar las búsquedas por TranNum en el detalle
-CREATE NONCLUSTERED INDEX IX_DespachoDtl_TranNum ON DespachoDtl(TranNum);
+CREATE NONCLUSTERED INDEX IX_DespachoDtl_TranNum ON [DP].DespachoDtl(TranNum);
 GO

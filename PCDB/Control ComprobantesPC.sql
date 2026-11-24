@@ -1,10 +1,42 @@
 select * from RV.RV_TBL_SIP_LOG_PC
+where TranNum in (5256,
+5259,
+5217)
 order by Fecha desc
 
 select * from RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
+where 
+id_caso
+in (
+20738,
+
+20735,
+
+20700
+)
+
+select * from RV.RV_TBL_SIP_DETALLE_COMPROBANTE
+where 
+TranNum
+in (
+5217,
+5256,
+5259
+)
+
+
+select * from RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
+where 
+
+Estado='Pendiente'
+AND Estado<>'Integrado'
+and CAST (Fecha as date) between '2026-06-01' and CAST(GETDATE() as date)
+order by TranNum Desc
+
+select * delete from RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
 where
         TranNum not in (select TranNum from RV.RV_TBL_SIP_DETALLE_COMPROBANTE)
-TranNum=3335
+and TranNum=5214
 
 --Update RV.RV_TBL_SIP_ENCABEZADO_COMPROBANTE
 --set Estado='ErrorLinea'
@@ -115,7 +147,7 @@ GroupoAsignado = null,
 Eliminado = null
 where /*FechaModificacion is not null
 and  Estado <> 'Pendiente'
-and */TranNum in (3335)
+and */TranNum in (5217)
 
 update RV.RV_TBL_SIP_DETALLE_COMPROBANTE
 set FechaModificacion = null,
@@ -124,8 +156,33 @@ Eliminado = null
 where FechaModificacion is not null
 and  Estado <> 'Pendiente'
 --AND TranNum < 17
---and TranNum in (4,15)
+and TranNum in (5217)
 Rollback tran
 
 commit tran
 
+select * from dbo.casos
+where ID=23212
+
+UPDATE dbo.casos	
+set id_estado=4
+where ID=23212
+
+UPDATE C
+					SET				C.id_estado							=		T.New_ID_Estado, 
+									--Actualizo numero legal de Epicor solo cuando el id de estado sea 12
+									C.nota_credito_debito				=		CASE
+																						WHEN		T.New_ID_Estado	=	12 
+																						THEN		T.LegalNumber 
+																						ELSE		C.nota_credito_debito
+																				END,								
+									C.NC_INTERNO						=		CASE
+																						WHEN		T.New_ID_Estado	=	12 
+																						THEN		T.InvoiceNum 
+																						ELSE		C.NC_INTERNO
+																				END						
+					FROM			dbo.casos							AS C
+					JOIN			@TablaTemporal						AS T 
+					ON				C.ID								=		T.id_caso 
+					AND				T.TipoCaso							=		'SO'
+					WHERE			C.id_estado							>=		4

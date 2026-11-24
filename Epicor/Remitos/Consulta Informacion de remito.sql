@@ -17,15 +17,15 @@ FROM
 	(
 		SELECT 
 				*
-		FROM	[CORPEPIDB].EpicorERP.Ice.UD110A WITH (NoLock)
+		FROM	[CORPE11-EPIDB].EpicorERP.Ice.UD110A WITH (NoLock)
 		WHERE	Key1 = 'ViajeCab'
 	)																					AS		UDA
 
-LEFT OUTER JOIN [CORPEPIDB].EpicorERP.Erp.ShipHead SH WITH (NoLock)
+LEFT OUTER JOIN [CORPE11-EPIDB].EpicorERP.Erp.ShipHead SH WITH (NoLock)
 	ON		UDA.Company				=			SH.Company
 	AND		UDA.Number06			=			SH.PackNum
 
-LEFT OUTER JOIN [CORPEPIDB].EpicorERP.Erp.InvcSched ISC WITH (NoLock)
+LEFT OUTER JOIN [CORPE11-EPIDB].EpicorERP.Erp.InvcSched ISC WITH (NoLock)
 	ON		UDA.Company				=			ISC.Company
 	AND		UDA.Number08			=			ISC.InvoiceNum
 
@@ -36,4 +36,4 @@ WHERE		UDA.ShortChar07			<>			''
 
 --------------------
 
-ORDER BY 1, 2 DESC 
+ORDER BY 1, 2, 3 DESC 

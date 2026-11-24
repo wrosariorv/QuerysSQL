@@ -36,12 +36,12 @@ Select * from
 												WHEN	LEN (NumeroRemito) = 15 THEN NumeroRemito
 												ELSE	CONCAT('R-',SUBSTRING (CAST (NumeroRemito AS VARCHAR),1,4),'-', SUBSTRING (CAST (NumeroRemito AS VARCHAR),5,8)) 
 											END		AS NroRemito
-						FROM				[CORPSQLMULT01].RV_Remitos.dbo.SyncEpicor							WITH (NoLock)
+						FROM				[CORPSQLMULT2019].RV_Remitos.dbo.SyncEpicor							WITH (NoLock)
 					) W
 WHERE				
 					--FechaActualizacion			BETWEEN			@FechaDesde		AND		@FechaHasta 
-					--W.FechaConforme is null
-					W.NroRemito in  ('R-0225-00012953','R-0225-00012943')
+					W.FechaConforme is null
+					--W.NroRemito in  ('R-0225-00012953','R-0225-00012943')
 
 --------------------------------------------------------
 --Busca en tabla de pendientes para integrar remitos sin confimra
@@ -96,7 +96,7 @@ INNER JOIN
 		CONCAT('R-',SUBSTRING (CAST (SYE.NumeroRemito AS VARCHAR),1,4),'-', SUBSTRING (CAST (SYE.NumeroRemito AS VARCHAR),5,8))
 		END AS NroRemito,SYE.FechaConforme 
 
-from 				[CORPSQLMULT01].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)) AS A
+from 				[CORPSQLMULT2019].RV_Remitos.dbo.SyncEpicor		SYE		WITH (NoLock)) AS A
 
 ON					UDA.ShortChar07 			=			A.NroRemito  COLLATE Modern_Spanish_CI_AS 
 

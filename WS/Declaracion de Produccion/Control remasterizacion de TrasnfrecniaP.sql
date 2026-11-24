@@ -1,21 +1,41 @@
+EXEC RV_PRC_OBTIENE_SERIES_PENDIENTES_OT 'CO01', 'RV914055', '43S5K-F', 40
+
 select top 1000 * from RV_TBL_SIP_LOG_TP
 where Estado<>'Completado'
 order by [Fecha] desc
 
-select top 1000 * from [TP].RV_TBL_SIP_LOG_TRANSFERENCIA_X_PLANTAS
-order by [Fecha] desc
 
 
 SELECT *
   FROM [WS].[dbo].[RV_VW_SIP_OT_SERIES_PENDIENTES]
 
   SELECT * FROM [RF].RV_TBL_SIP_RFID_SERIE
+  select * 
+  --delete
+  from [WS].[dbo].RV_TBL_SIP_ENCABEZADO_TRANSFERENCIA_P 
+  where
+            Estado<>'Integrado'
+    and TranNum not in (select TranNum from [WS].[dbo].RV_TBL_SIP_ITEM_TP where  Estado<>'Integrado')
+    update [WS].[dbo].RV_TBL_SIP_ENCABEZADO_TRANSFERENCIA_P 
+    set Estado='Procesando'
+    where
+            Estado<>'Integrado'
+
 
   select * 
   --delete
   from [WS].[dbo].RV_TBL_SIP_ENCABEZADO_TRANSFERENCIA_P 
   where
             Estado<>'Integrado'
+            --and TranNum=86676
+  order by TranNum desc
+
+    select * 
+  --delete
+  from [WS].[dbo].RV_TBL_SIP_ITEM_TP 
+  where
+            Estado<>'Integrado'
+            --and TranNum=86676
   order by TranNum desc
   
 
@@ -99,16 +119,16 @@ FROM			[CORPE11-EPIDB].[EpicorERP].erp.SerialNo    SN WITH (NOLOCK)
 LEFT JOIN      [CORPE11-EPIDB].[EpicorERP].ERP.SerialNo_UD     UD WITH (NOLOCK)
       ON            SN.SysRowID        =             UD.ForeignSysRowID
 INNER JOIN      (
-                    SELECT Company, PartNum, TranNum, Serie 
-                    
-                    FROM RV_TBL_SIP_ITEM_TP
-
-                    WHERE [TranNum] Between 52997 and 53005
+                    SELECT Company, PartNum, SerialNumber 
+                   
+						FROM	[WS].[RF].[RV_TBL_SIP_RFID_SERIE] 
+						where	Estado in ( 'Pendiente', 'Procesando')
                 ) AS W
 ON              SN.Company          =           W.Company
 ANd             SN.PartNum          =           W.PartNum
-AND             SN.SerialNumber            =           W.Serie
+AND             SN.SerialNumber            =           W.SerialNumber
 where 
+SN.SNStatus ='WIP'
         /*Company ='CO01'
         AND PartNum = '55C655A-F'
         AND*/ SN.SerialNumber in ('RT3297410001687','RT3297410001690')
